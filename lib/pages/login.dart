@@ -70,7 +70,7 @@ class _loginState extends State<login> {
               SizedBox(
                 width: 100,
                 height: 100,
-                child: Image.asset('assets/usuario.png', fit: BoxFit.fill),
+                child: Image.asset('assets/wakala.png', fit: BoxFit.fill),
               ),
               sizedBox,
               TextField(
@@ -101,7 +101,7 @@ class _loginState extends State<login> {
                   height: 50,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          primary: Colors.cyan, shape: StadiumBorder()),
+                          primary: Colors.orange[800], shape: StadiumBorder()),
                       onPressed: () {
                         if (emailController.text.length == 0) {
                           Fluttertoast.showToast(
@@ -127,7 +127,7 @@ class _loginState extends State<login> {
                               emailController.text, passwordController.text);
                         }
                       },
-                      child: Text("Iniciar sesión"))),
+                      child: Text("Ingresar"))),
               sizedBox,
               GestureDetector(
                   onLongPress: () {
