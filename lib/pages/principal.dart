@@ -15,15 +15,14 @@ class Principal extends StatefulWidget {
 }
 
 class _PrincipalState extends State<Principal> {
-  List<MensajesApi> parseMensajes(String responseBody) {
+  List<ListadoApi> parseMensajes(String responseBody) {
     final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-    return parsed
-        .map<MensajesApi>((json) => MensajesApi.fromJson(json))
-        .toList();
+    return parsed.map<ListadoApi>((json) => ListadoApi.fromJson(json)).toList();
   }
 
-  Future<List<MensajesApi>> obtDatos() async {
-    var url = Uri.parse("https://40fd422c6d4d.sa.ngrok.io/api/mensajes");
+  Future<List<ListadoApi>> obtDatos() async {
+    var url = Uri.parse(
+        "https://94d890b81bf7.sa.ngrok.io/api/wuakalasApi/Getwuakalas");
     final rep = await http.get(url);
     if (rep.statusCode == 200) {
       return parseMensajes(rep.body);
@@ -32,13 +31,12 @@ class _PrincipalState extends State<Principal> {
     }
   }
 
-  Widget cuadro_indicador(
-      String fecha, String login, String titulo, String texto) {
+  Widget cuadro_indicador(String sector, String autor, String fecha) {
     return Padding(
         padding: const EdgeInsets.all(16.0),
         child: Container(
             width: double.infinity,
-            height: 100 + (titulo.length / 10 + texto.length / 10) * 4.2,
+            height: 100,
             padding: const EdgeInsets.all(15),
             alignment: Alignment.center,
             decoration: BoxDecoration(
@@ -49,41 +47,21 @@ class _PrincipalState extends State<Principal> {
               Center(
                   child: Column(
                 children: [
-                  Row(
-                    children: [
-                      const Text('Fecha: ',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      Text(fecha.substring(0, 10) +
-                          '  ' +
-                          fecha.substring(11, 16))
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const Text('Login: ',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      Text(login)
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const Text(
-                        'Titulo: ',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.left,
-                      ),
-                      Flexible(
-                        child: Text(titulo),
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const Text('Descripción: ',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      Flexible(child: Text(texto))
-                    ],
-                  ),
+                  Row(children: [
+                    const Text('Sector: ',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Flexible(child: Text(sector))
+                  ]),
+                  Row(children: [
+                    const Text('por: ',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Flexible(child: Text(autor))
+                  ]),
+                  Row(children: [
+                    const Text('fecha: ',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Flexible(child: Text(fecha))
+                  ])
                 ],
               )),
             ])));
@@ -93,25 +71,24 @@ class _PrincipalState extends State<Principal> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Supermensajes'),
+        title: const Text('Listado de Wakalas'),
         backgroundColor: Colors.cyan,
       ),
-      body: FutureBuilder<List<MensajesApi>>(
+      body: FutureBuilder<List<ListadoApi>>(
           future: obtDatos(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              AsyncSnapshot<List<MensajesApi>> ls = snapshot;
-              List<MensajesApi>? lll = ls.data?.cast<MensajesApi>();
+              AsyncSnapshot<List<ListadoApi>> ls = snapshot;
+              List<ListadoApi>? lll = ls.data?.cast<ListadoApi>();
 
               return SingleChildScrollView(
                 controller: null,
                 child: Column(children: [
                   for (int i = 0; i < lll!.length; i++)
                     cuadro_indicador(
-                        lll.elementAt(i).fecha,
-                        lll.elementAt(i).login,
-                        lll.elementAt(i).texto,
-                        lll.elementAt(i).titulo)
+                        lll.elementAt(i).sector.toString(),
+                        lll.elementAt(i).autor.toString(),
+                        lll.elementAt(i).fecha.toString())
                 ]),
               );
             } else if (snapshot.hasError) {
@@ -186,34 +163,27 @@ class _PrincipalState extends State<Principal> {
   }
 }
 
-class MensajesApi {
-  MensajesApi({
-    required this.id,
-    required this.login,
-    required this.titulo,
-    required this.texto,
-    required this.fecha,
-  });
+class ListadoApi {
+  int? id;
+  String? sector;
+  String? autor;
+  String? fecha;
 
-  int id;
-  String login;
-  String titulo;
-  String texto;
-  String fecha;
+  ListadoApi({this.id, this.sector, this.autor, this.fecha});
 
-  factory MensajesApi.fromJson(Map<String, dynamic> json) => MensajesApi(
-        id: json["id"],
-        login: json["login"],
-        titulo: json["titulo"],
-        texto: json["texto"],
-        fecha: (json["fecha"]),
-      );
+  ListadoApi.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    sector = json['sector'];
+    autor = json['autor'];
+    fecha = json['fecha'];
+  }
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "login": login,
-        "titulo": titulo,
-        "texto": texto,
-        "fecha": fecha,
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['sector'] = this.sector;
+    data['autor'] = this.autor;
+    data['fecha'] = this.fecha;
+    return data;
+  }
 }
