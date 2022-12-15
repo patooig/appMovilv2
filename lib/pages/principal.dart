@@ -71,7 +71,7 @@ class _PrincipalState extends State<Principal> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Listado de Wakalas'),
-        backgroundColor: Colors.cyan,
+        backgroundColor: Colors.orange[800],
       ),
       body: FutureBuilder<List<ListadoApi>>(
           // future: //obtDatos(),
@@ -99,7 +99,7 @@ class _PrincipalState extends State<Principal> {
       }),
       floatingActionButton: FloatingActionButton(
         tooltip: 'Mensajes',
-        backgroundColor: Colors.cyan,
+        backgroundColor: Colors.orange[800],
         onPressed: () {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const Ingreso()));

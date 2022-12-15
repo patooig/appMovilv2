@@ -1,8 +1,9 @@
-import 'package:demo_login/pages/login.dart';
 import 'package:demo_login/pages/principal.dart';
 import 'package:flutter/material.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MyApp());
 }
 
