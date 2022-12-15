@@ -15,21 +15,20 @@ class Principal extends StatefulWidget {
 }
 
 class _PrincipalState extends State<Principal> {
-  List<ListadoApi> parseMensajes(String responseBody) {
+  /* List<ListadoApi> parseMensajes(String responseBody) {
     final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
     return parsed.map<ListadoApi>((json) => ListadoApi.fromJson(json)).toList();
-  }
+  }*/
 
-  Future<List<ListadoApi>> obtDatos() async {
-    var url = Uri.parse(
-        "https://94d890b81bf7.sa.ngrok.io/api/wuakalasApi/Getwuakalas");
+  /*Future<List<ListadoApi>> obtDatos() async {
+    var url = Uri.parse("https://google.cl");
     final rep = await http.get(url);
     if (rep.statusCode == 200) {
       return parseMensajes(rep.body);
     } else {
       throw Exception("Fallo al obtener datos");
     }
-  }
+  }*/
 
   Widget cuadro_indicador(String sector, String autor, String fecha) {
     return Padding(
@@ -75,29 +74,29 @@ class _PrincipalState extends State<Principal> {
         backgroundColor: Colors.cyan,
       ),
       body: FutureBuilder<List<ListadoApi>>(
-          future: obtDatos(),
+          // future: //obtDatos(),
           builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              AsyncSnapshot<List<ListadoApi>> ls = snapshot;
-              List<ListadoApi>? lll = ls.data?.cast<ListadoApi>();
+        if (snapshot.hasData) {
+          AsyncSnapshot<List<ListadoApi>> ls = snapshot;
+          List<ListadoApi>? lll = ls.data?.cast<ListadoApi>();
 
-              return SingleChildScrollView(
-                controller: null,
-                child: Column(children: [
-                  for (int i = 0; i < lll!.length; i++)
-                    cuadro_indicador(
-                        lll.elementAt(i).sector.toString(),
-                        lll.elementAt(i).autor.toString(),
-                        lll.elementAt(i).fecha.toString())
-                ]),
-              );
-            } else if (snapshot.hasError) {
-              return const Text("ERROR");
-            }
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }),
+          return SingleChildScrollView(
+            controller: null,
+            child: Column(children: [
+              for (int i = 0; i < lll!.length; i++)
+                cuadro_indicador('Hola', 'Hola', 'Hola ,')
+              //lll.elementAt(i).sector.toString(),
+              //lll.elementAt(i).autor.toString(),
+              //lll.elementAt(i).fecha.toString())
+            ]),
+          );
+        } else if (snapshot.hasError) {
+          return const Text("ERROR");
+        }
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }),
       floatingActionButton: FloatingActionButton(
         tooltip: 'Mensajes',
         backgroundColor: Colors.cyan,
@@ -106,7 +105,7 @@ class _PrincipalState extends State<Principal> {
               MaterialPageRoute(builder: (context) => const Ingreso()));
         },
         child: const Icon(
-          Icons.message,
+          Icons.add,
           color: Colors.white,
         ),
       ),

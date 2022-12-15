@@ -32,7 +32,7 @@ class _IngresoState extends State<Ingreso> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Agregar mensajes'),
+        title: const Text('Avisar por nuevo wakala'),
         backgroundColor: Colors.cyan,
       ),
       body: Column(children: <Widget>[
@@ -40,7 +40,7 @@ class _IngresoState extends State<Ingreso> {
             padding: const EdgeInsets.all(16.0),
             child: TextField(
               decoration: const InputDecoration(
-                  border: OutlineInputBorder(), labelText: "Título"),
+                  border: OutlineInputBorder(), labelText: "Sector"),
               maxLines: 1,
               controller: titulo,
             )),
@@ -48,9 +48,37 @@ class _IngresoState extends State<Ingreso> {
             padding: const EdgeInsets.all(16.0),
             child: TextField(
               decoration: const InputDecoration(
-                  border: OutlineInputBorder(), labelText: "Texto"),
+                  border: OutlineInputBorder(), labelText: "Descripcion"),
               maxLines: 1,
               controller: texto,
+            )),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              const SizedBox(width: 30),
+              ElevatedButton(
+                  onPressed: () {},
+                  child: Text('Foto 1'),
+                  style: ElevatedButton.styleFrom(primary: Colors.cyan)),
+              const SizedBox(width: 125),
+              ElevatedButton(
+                  onPressed: () {},
+                  child: Text('Foto 2'),
+                  style: ElevatedButton.styleFrom(primary: Colors.cyan)),
+            ],
+          ),
+        ),
+        Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                //Widget to see the image
+
+                const SizedBox(width: 30),
+
+                const SizedBox(width: 125),
+              ],
             )),
         ElevatedButton(
           onPressed: () {
