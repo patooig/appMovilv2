@@ -1,4 +1,4 @@
-import 'package:demo_login/pages/principal.dart';
+import 'package:Wakala/pages/principal.dart';
 import 'package:flutter/material.dart';
 
 void main() {

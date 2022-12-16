@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'package:demo_login/pages/ingreso.dart';
-import 'package:demo_login/pages/integrantes.dart';
+import 'package:Wakala/pages/ingreso.dart';
+import 'package:Wakala/pages/integrantes.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import '../global.dart';
-import 'package:demo_login/pages/login.dart';
+import 'package:Wakala/pages/login.dart';
 import 'package:http/http.dart' as http;
 
 class Principal extends StatefulWidget {

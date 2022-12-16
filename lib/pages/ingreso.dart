@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'package:demo_login/pages/principal.dart';
+import 'package:Wakala/pages/principal.dart';
 import 'package:flutter/material.dart';
 import 'package:cool_alert/cool_alert.dart';
-import 'package:demo_login/services/ingresoService.dart';
+import 'package:Wakala/services/ingresoService.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 

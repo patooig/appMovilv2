@@ -1,7 +1,7 @@
 import 'package:cool_alert/cool_alert.dart';
-import 'package:demo_login/global.dart';
-import 'package:demo_login/pages/principal.dart';
-import 'package:demo_login/services/loginService.dart';
+import 'package:Wakala/global.dart';
+import 'package:Wakala/pages/principal.dart';
+import 'package:Wakala/services/loginService.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
