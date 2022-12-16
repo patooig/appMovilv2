@@ -144,7 +144,12 @@ class _loginState extends State<login> {
                   child: const Text(
                     "¿Olvido su password?",
                     style: TextStyle(color: Colors.blue),
-                  ))
+                  )),
+              Padding(padding: EdgeInsets.only(top: 18)),
+              Text(
+                "By: Ivonne Flores &  Patricio Inostroza",
+                style: TextStyle(color: Colors.black45),
+              )
             ],
           ),
         ),
