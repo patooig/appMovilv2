@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:camera/camera.dart';
 import 'package:demo_login/pages/principal.dart';
 import 'package:flutter/material.dart';
 import 'package:cool_alert/cool_alert.dart';
@@ -19,11 +17,8 @@ class _IngresoState extends State<Ingreso> {
   TextEditingController titulo = TextEditingController();
   TextEditingController texto = TextEditingController();
 
-  late Future<void> _initializeControllerFuture; //for camera
-  late CameraController _controller; //controller for camera
-
-  File? _image; //for image picker
-  File? _image2; //for image picker
+  File? _image; //for image1 picker
+  File? _image2; //for image2 picker
 
   Future<void> validarDatos(String titulo, String texto) async {
     final response = await ingDatos().ingresarDatos(titulo, texto);
@@ -41,11 +36,6 @@ class _IngresoState extends State<Ingreso> {
 // You must wait until the controller is initialized before displaying the
 // camera preview. Use a FutureBuilder to display a loading spinner until the
 // controller has finished initializing.
-
-  loadCamera() async {
-    final cameras = await availableCameras();
-    final firstCamera = cameras.first;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +62,7 @@ class _IngresoState extends State<Ingreso> {
                 controller: texto,
               )),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Column(
                 children: [
@@ -80,9 +71,7 @@ class _IngresoState extends State<Ingreso> {
                         final image = await ImagePicker()
                             .pickImage(source: ImageSource.camera);
                         if (image == null) return;
-
                         final ImageTemporal = File(image.path);
-
                         setState(() {
                           this._image = ImageTemporal;
                         });
@@ -91,9 +80,10 @@ class _IngresoState extends State<Ingreso> {
                       style: ElevatedButton.styleFrom(primary: Colors.cyan)),
                   Container(
                     //Show the imageFile1
-                    padding: EdgeInsets.all(30),
+                    padding: EdgeInsets.all(16),
                     child: _image == null
-                        ? Text("No image captured")
+                        ? Icon(Icons.camera_alt_outlined,
+                            size: 100, color: Colors.grey)
                         : Image.file(
                             File(_image!.path),
                             height: 200,
@@ -101,7 +91,11 @@ class _IngresoState extends State<Ingreso> {
                   ) //display captured image
                   ,
                   ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          _image = null;
+                        });
+                      },
                       child: Text('Borrar'),
                       style: ElevatedButton.styleFrom(primary: Colors.white24))
                 ],
@@ -124,61 +118,72 @@ class _IngresoState extends State<Ingreso> {
                       style: ElevatedButton.styleFrom(primary: Colors.cyan)),
                   Container(
                     //show captured image
-                    padding: EdgeInsets.all(30),
-                    child: _image == null
-                        ? Text("No image captured")
+                    padding: EdgeInsets.all(16),
+                    child: _image2 == null
+                        ? Icon(Icons.camera_alt_outlined,
+                            size: 100, color: Colors.grey)
                         : Image.file(
-                            File(_image!.path),
+                            File(_image2!.path),
                             height: 200,
                           ),
                   ) //display captured image
                   ,
                   ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          _image2 = null;
+                        });
+                      },
                       child: Text('Borrar'),
                       style: ElevatedButton.styleFrom(primary: Colors.white24))
                 ],
               ),
             ],
           ),
-          ElevatedButton(
-            onPressed: () {
-              if (titulo.text.length == 0) {
-                Fluttertoast.showToast(
-                    msg: "Ingrese titulo",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.TOP,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.red,
-                    textColor: Colors.white,
-                    fontSize: 16.0);
-              }
-              if (texto.text.length == 0) {
-                Fluttertoast.showToast(
-                    msg: "Ingrese una descripción",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.TOP,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.red,
-                    textColor: Colors.white,
-                    fontSize: 16.0);
-              } else {
-                validarDatos(titulo.text, texto.text);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Principal()));
-              }
-            },
-            child: const Text('Denunciar wakala !'),
-            style: ElevatedButton.styleFrom(primary: Colors.green),
-          ),
-          ElevatedButton(
+          Column(children: [
+            ElevatedButton(
               onPressed: () {
-                Navigator.pop(context);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Principal()));
+                if (titulo.text.length == 0) {
+                  Fluttertoast.showToast(
+                      msg: "Ingrese sector",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.TOP,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                }
+                if (texto.text.length == 0) {
+                  Fluttertoast.showToast(
+                      msg: "Ingrese una descripción",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.TOP,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                } else {
+                  validarDatos(titulo.text, texto.text);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Principal()));
+                }
               },
-              child: Text('Me arrepentí'),
-              style: ElevatedButton.styleFrom(primary: Colors.red)),
+              child: const Text('Denunciar wakala !'),
+              style: ElevatedButton.styleFrom(primary: Colors.green),
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Principal()));
+                },
+                child: Text('Me arrepentí'),
+                style: ElevatedButton.styleFrom(primary: Colors.red)),
+          ]),
         ]));
   }
 }
