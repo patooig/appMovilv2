@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:Wakala/pages/detalleWakala.dart';
 import 'package:Wakala/pages/ingreso.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -33,11 +34,15 @@ class _PrincipalState extends State<Principal> {
     return Padding(
         padding: const EdgeInsets.all(16.0),
         child: Container(
-            width: double.infinity,
-            height: 100,
             padding: const EdgeInsets.all(15),
             alignment: Alignment.center,
-            decoration: BoxDecoration(color: Colors.amber[100]),
+            decoration: BoxDecoration(
+                color: Colors.amber[100],
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: Colors.orange[800]!,
+                  width: 1,
+                )),
             child: Column(children: [
               Center(
                   child: Column(

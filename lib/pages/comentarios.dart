@@ -1,15 +1,25 @@
 import 'package:Wakala/pages/detalleWakala.dart';
+import 'package:Wakala/pages/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:Wakala/services/comentarioService.dart';
+import 'package:Wakala/global.dart';
 
 class comentarios extends StatefulWidget {
-  const comentarios({super.key});
+  final int id;
+
+  const comentarios({key, required this.id}) : super(key: key);
 
   @override
-  State<comentarios> createState() => _comentariosState();
+  State<comentarios> createState() => _comentariosState(id);
 }
 
 class _comentariosState extends State<comentarios> {
+  TextEditingController comentario = TextEditingController();
+  final int id;
+  _comentariosState(this.id);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +37,7 @@ class _comentariosState extends State<comentarios> {
           ),
           const SizedBox(height: 10),
           TextField(
+            controller: comentario,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
             ),
@@ -35,7 +46,8 @@ class _comentariosState extends State<comentarios> {
           const SizedBox(height: 10),
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(context);
+              addComentario(id.toString(), comentario.toString(),
+                  Global.getLogin().toString());
             },
             child: const Text('Comentar wakala'),
           ),

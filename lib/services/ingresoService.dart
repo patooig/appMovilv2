@@ -4,7 +4,7 @@ import 'dart:convert';
 
 class ingDatos {
   Future<http.Response> ingresarDatos(String titulo, String texto) async {
-    var data = {'login': Global.login, 'titulo': texto, 'texto': titulo};
+    var data = {'login': Global.login_global, 'titulo': texto, 'texto': titulo};
     final String jsonString = jsonEncode(data);
     return await http.post(
       Uri.parse('https://40fd422c6d4d.sa.ngrok.io/api/mensajes'),

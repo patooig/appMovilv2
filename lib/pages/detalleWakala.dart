@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:Wakala/pages/comentarios.dart';
 import 'package:Wakala/pages/detalleFoto.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,9 +15,10 @@ class detalleWakala extends StatefulWidget {
 
 class _detalleWakalaState extends State<detalleWakala> {
   var mappp;
+  late final int id;
 
   Map<String, dynamic> _data = Map<String, dynamic>();
-  _detalleWakalaState(int id) {
+  _detalleWakalaState(this.id) {
     mappp = obtDatos(id);
   }
 
@@ -31,16 +33,36 @@ class _detalleWakalaState extends State<detalleWakala> {
 
   String foto2 = "";
 
+  Future<http.Response> updateCountSigue(int id) {
+    return http.put(
+      Uri.parse(
+          'https://882aa2605781.sa.ngrok.io/api/wuakalasApi/PutSigueAhi/$id'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{}),
+    );
+  }
+
+  Future<http.Response> discountCountSigue(int id) {
+    return http.put(
+      Uri.parse(
+          'https://882aa2605781.sa.ngrok.io/api/wuakalasApi/PutYanoEsta/$id'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{}),
+    );
+  }
+
   void submit1() {
     if (flag_like) {
       setState(() {
-        num_likes++;
         flag_like = false;
         option2 = false;
       });
     } else {
       setState(() {
-        num_likes--;
         flag_like = true;
         option2 = true;
       });
@@ -64,7 +86,6 @@ class _detalleWakalaState extends State<detalleWakala> {
   }
 
   obtDatos(idd) async {
-    //idd) async {
     var url = Uri.parse(
         "https://882aa2605781.sa.ngrok.io/api/wuakalasApi/Getwuakala/$idd");
     final rep = await http.get(url);
@@ -106,13 +127,22 @@ class _detalleWakalaState extends State<detalleWakala> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text(comentario, style: TextStyle(fontSize: 14)),
+            Row(
+              children: [
+                Flexible(
+                  child: Text(
+                    comentario,
+                  ),
+                ),
+              ],
+            ),
             SizedBox(height: 8),
             Row(
               children: [
-                Text('Por @' + nombre,
-                    style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
-                    textAlign: TextAlign.right)
+                Text(
+                  'Por @' + nombre,
+                  style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
+                )
               ],
             )
           ],
@@ -189,20 +219,52 @@ class _detalleWakalaState extends State<detalleWakala> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             ElevatedButton(
-                              onPressed: option1 ? () => submit1() : null,
+                              // Boton de SIGUE AHI
+                              onPressed: option1
+                                  ? () => {
+                                        if (flag_like)
+                                          {
+                                            num_likes =
+                                                snapshot.data['sigue_ahi'],
+                                            snapshot.data['sigue_ahi']++,
+                                            submit1()
+                                          }
+                                        else
+                                          {
+                                            snapshot.data['sigue_ahi']--,
+                                            submit1()
+                                          },
+                                      }
+                                  : null,
                               child: Text('Sigue ahí (' +
                                   snapshot.data['sigue_ahi'].toString() +
                                   ')'),
                               style: ElevatedButton.styleFrom(
-                                  primary: Colors.green),
+                                  primary: CupertinoColors.activeGreen),
                             ),
                             ElevatedButton(
-                              onPressed: option2 ? () => submit2() : null,
+                              // Boton de YA NO ESTA
+                              onPressed: option2
+                                  ? () => {
+                                        if (flag_dislike)
+                                          {
+                                            num_dislikes =
+                                                snapshot.data['ya_no_esta'],
+                                            snapshot.data['ya_no_esta']++,
+                                            submit2()
+                                          }
+                                        else
+                                          {
+                                            snapshot.data['ya_no_esta']--,
+                                            submit2()
+                                          },
+                                      }
+                                  : null,
                               child: Text('Ya no está (' +
                                   snapshot.data['ya_no_esta'].toString() +
                                   ')'),
-                              style:
-                                  ElevatedButton.styleFrom(primary: Colors.red),
+                              style: ElevatedButton.styleFrom(
+                                  primary: CupertinoColors.destructiveRed),
                             ),
                           ],
                         ),
@@ -221,7 +283,7 @@ class _detalleWakalaState extends State<detalleWakala> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const comentarios()));
+                                              comentarios(id: id)));
                                 },
                                 child: Text(
                                   'Comentar',
@@ -239,9 +301,15 @@ class _detalleWakalaState extends State<detalleWakala> {
                               snapshot.data['comentarios'][i]['descripcion']),
                         ElevatedButton(
                             onPressed: () {
+                              if (flag_like == false && flag_dislike == true) {
+                                updateCountSigue(id);
+                              }
+                              if (flag_dislike == false && flag_like == true) {
+                                discountCountSigue(id);
+                              }
                               Navigator.pop(context);
                             },
-                            child: Text('Volver al listado'))
+                            child: Text('Guardar y volver'))
                       ]),
                     )
                   ],

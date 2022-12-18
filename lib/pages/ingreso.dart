@@ -15,7 +15,7 @@ class Ingreso extends StatefulWidget {
 
 class _IngresoState extends State<Ingreso> {
   TextEditingController titulo = TextEditingController();
-  TextEditingController texto = TextEditingController();
+  TextEditingController descrip = TextEditingController();
 
   File? _image; //for image1 picker
   File? _image2; //for image2 picker
@@ -59,7 +59,7 @@ class _IngresoState extends State<Ingreso> {
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(), labelText: "Descripcion"),
                 maxLines: 1,
-                controller: texto,
+                controller: descrip,
               )),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -153,7 +153,7 @@ class _IngresoState extends State<Ingreso> {
                       textColor: Colors.white,
                       fontSize: 16.0);
                 }
-                if (texto.text.length == 0) {
+                if (descrip.text.length == 0) {
                   Fluttertoast.showToast(
                       msg: "Ingrese una descripción",
                       toastLength: Toast.LENGTH_SHORT,
@@ -162,8 +162,18 @@ class _IngresoState extends State<Ingreso> {
                       backgroundColor: Colors.red,
                       textColor: Colors.white,
                       fontSize: 16.0);
+                }
+                if (descrip.text.length < 15) {
+                  Fluttertoast.showToast(
+                      msg: "Ingrese una descripción más larga",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.TOP,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
                 } else {
-                  validarDatos(titulo.text, texto.text);
+                  validarDatos(titulo.text, descrip.text);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -176,10 +186,6 @@ class _IngresoState extends State<Ingreso> {
             ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const Principal()));
                 },
                 child: Text('Me arrepentí'),
                 style: ElevatedButton.styleFrom(primary: Colors.red)),

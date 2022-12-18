@@ -28,7 +28,7 @@ class _loginState extends State<login> {
     if (response.statusCode == 200) {
       //almacenar de alguna manera el login
       await pref.setString('usuario', email);
-      Global.login = email;
+      Global.login_global = email;
       Navigator.pop(context);
       Navigator.push(
         context,
