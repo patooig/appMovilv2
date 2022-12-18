@@ -1,10 +1,8 @@
 import 'dart:convert';
+
+import 'package:Wakala/pages/detalleWakala.dart';
 import 'package:Wakala/pages/ingreso.dart';
-import 'package:Wakala/pages/integrantes.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
-import '../global.dart';
-import 'package:Wakala/pages/login.dart';
 import 'package:http/http.dart' as http;
 
 class Principal extends StatefulWidget {
@@ -15,22 +13,23 @@ class Principal extends StatefulWidget {
 }
 
 class _PrincipalState extends State<Principal> {
-  /* List<ListadoApi> parseMensajes(String responseBody) {
+  List<ListadoApi> parseMensajes(String responseBody) {
     final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
     return parsed.map<ListadoApi>((json) => ListadoApi.fromJson(json)).toList();
-  }*/
+  }
 
-  /*Future<List<ListadoApi>> obtDatos() async {
-    var url = Uri.parse("https://google.cl");
+  Future<List<ListadoApi>> obtDatos() async {
+    var url = Uri.parse(
+        "https://882aa2605781.sa.ngrok.io/api/wuakalasApi/Getwuakalas");
     final rep = await http.get(url);
     if (rep.statusCode == 200) {
       return parseMensajes(rep.body);
     } else {
       throw Exception("Fallo al obtener datos");
     }
-  }*/
+  }
 
-  Widget cuadro_indicador(String sector, String autor, String fecha) {
+  Widget cuadro_indicador(int id, String sector, String autor, String fecha) {
     return Padding(
         padding: const EdgeInsets.all(16.0),
         child: Container(
@@ -38,29 +37,36 @@ class _PrincipalState extends State<Principal> {
             height: 100,
             padding: const EdgeInsets.all(15),
             alignment: Alignment.center,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.lime[100]),
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            decoration: BoxDecoration(color: Colors.amber[100]),
+            child: Column(children: [
               Center(
                   child: Column(
                 children: [
                   Row(children: [
-                    const Text('Sector: ',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Flexible(child: Text(sector))
+                    Flexible(
+                        child: Text(
+                      sector,
+                      style: TextStyle(fontSize: 20),
+                    )),
+                    IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => detalleWakala(
+                                        id: id,
+                                      )));
+                        },
+                        icon: const Icon(Icons.arrow_forward_ios))
                   ]),
                   Row(children: [
-                    const Text('por: ',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Flexible(child: Text(autor))
+                    const Text('por @',
+                        style: TextStyle(fontWeight: FontWeight.normal)),
+                    Flexible(child: Text(autor)),
+                    const Text(' el ',
+                        style: TextStyle(fontWeight: FontWeight.normal)),
+                    Flexible(child: Text(fecha.substring(0, 10)))
                   ]),
-                  Row(children: [
-                    const Text('fecha: ',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    Flexible(child: Text(fecha))
-                  ])
                 ],
               )),
             ])));
@@ -74,31 +80,32 @@ class _PrincipalState extends State<Principal> {
         backgroundColor: Colors.orange[800],
       ),
       body: FutureBuilder<List<ListadoApi>>(
-          // future: //obtDatos(),
+          future: obtDatos(),
           builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          AsyncSnapshot<List<ListadoApi>> ls = snapshot;
-          List<ListadoApi>? lll = ls.data?.cast<ListadoApi>();
+            if (snapshot.hasData) {
+              AsyncSnapshot<List<ListadoApi>> ls = snapshot;
+              List<ListadoApi>? lll = ls.data?.cast<ListadoApi>();
 
-          return SingleChildScrollView(
-            controller: null,
-            child: Column(children: [
-              for (int i = 0; i < lll!.length; i++)
-                cuadro_indicador('Hola', 'Hola', 'Hola ,')
-              //lll.elementAt(i).sector.toString(),
-              //lll.elementAt(i).autor.toString(),
-              //lll.elementAt(i).fecha.toString())
-            ]),
-          );
-        } else if (snapshot.hasError) {
-          return const Text("ERROR");
-        }
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }),
+              return SingleChildScrollView(
+                controller: null,
+                child: Column(children: [
+                  for (int i = lll!.length - 1; i >= 0; i--)
+                    cuadro_indicador(
+                        lll.elementAt(i).id!,
+                        lll.elementAt(i).sector.toString(),
+                        lll.elementAt(i).autor.toString(),
+                        lll.elementAt(i).fecha.toString())
+                ]),
+              );
+            } else if (snapshot.hasError) {
+              return const Text("ERROR");
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }),
       floatingActionButton: FloatingActionButton(
-        tooltip: 'Mensajes',
+        tooltip: 'Añadir Wakala',
         backgroundColor: Colors.orange[800],
         onPressed: () {
           Navigator.push(context,
@@ -107,55 +114,6 @@ class _PrincipalState extends State<Principal> {
         child: const Icon(
           Icons.add,
           color: Colors.white,
-        ),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
-              child: Image.asset('assets/usuario.png', fit: BoxFit.contain),
-            ),
-            Center(
-              child: Text('Bienvenid@, ' + Global.login),
-            ),
-            ListTile(
-              title: const Text('Agregar'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Ingreso()));
-              },
-            ),
-            ListTile(
-              title: const Text('Integrantes'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const Integrantes()));
-              },
-            ),
-            ListTile(
-              title: const Text('Salir'),
-              onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (BuildContext context) {
-                  return login();
-                }));
-              },
-            )
-          ],
         ),
       ),
     );

@@ -20,22 +20,20 @@ class _loginState extends State<login> {
   TextEditingController passwordController = TextEditingController();
 
   Future<void> validarDatos(String email, String password) async {
-    final response = await LoginService().validar(email, password);
+    final response =
+        await LoginService().validar(email.toString(), password.toString());
 
-    if (email.toString() == "test" && password.toString() == "123") {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Principal()));
-    }
+    print(response.statusCode);
 
     if (response.statusCode == 200) {
       //almacenar de alguna manera el login
-
       await pref.setString('usuario', email);
-
       Global.login = email;
-
+      Navigator.pop(context);
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Principal()));
+        context,
+        MaterialPageRoute(builder: (context) => const Principal()),
+      );
     } else {
       CoolAlert.show(
         context: context,
