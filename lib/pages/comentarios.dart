@@ -46,8 +46,15 @@ class _comentariosState extends State<comentarios> {
           const SizedBox(height: 10),
           ElevatedButton(
             onPressed: () {
-              addComentario(id.toString(), comentario.toString(),
-                  Global.getLogin().toString());
+              addComentario(id.toString(), comentario.text, Global.getId());
+
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => detalleWakala(
+                            id: id,
+                          )));
+              Navigator.pop(context);
             },
             child: const Text('Comentar wakala'),
           ),

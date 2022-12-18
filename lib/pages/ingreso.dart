@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:Wakala/pages/principal.dart';
 import 'package:flutter/material.dart';
 import 'package:cool_alert/cool_alert.dart';
@@ -14,14 +16,17 @@ class Ingreso extends StatefulWidget {
 }
 
 class _IngresoState extends State<Ingreso> {
-  TextEditingController titulo = TextEditingController();
+  TextEditingController sector = TextEditingController();
   TextEditingController descrip = TextEditingController();
 
   File? _image; //for image1 picker
   File? _image2; //for image2 picker
+  String _base64Image1 = "";
+  String _base64Image2 = "";
 
-  Future<void> validarDatos(String titulo, String texto) async {
-    final response = await ingDatos().ingresarDatos(titulo, texto);
+  Future<void> validarDatos(String sec, String desc) async {
+    final response =
+        await ingDatos().ingresarDatos(sec, desc, _base64Image1, _base64Image2);
     if (response.statusCode == 200) {
       CoolAlert.show(
         context: context,
@@ -51,7 +56,7 @@ class _IngresoState extends State<Ingreso> {
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(), labelText: "Sector"),
                 maxLines: 1,
-                controller: titulo,
+                controller: sector,
               )),
           Padding(
               padding: const EdgeInsets.all(16.0),
@@ -72,6 +77,10 @@ class _IngresoState extends State<Ingreso> {
                             .pickImage(source: ImageSource.camera);
                         if (image == null) return;
                         final ImageTemporal = File(image.path);
+
+                        Uint8List _bytes = await image.readAsBytes();
+                        _base64Image1 = base64.encode(_bytes);
+
                         setState(() {
                           this._image = ImageTemporal;
                         });
@@ -110,6 +119,8 @@ class _IngresoState extends State<Ingreso> {
 
                         final ImageTemporal2 = File(image2.path);
 
+                        Uint8List _bytes = await image2.readAsBytes();
+                        _base64Image2 = base64.encode(_bytes);
                         setState(() {
                           this._image2 = ImageTemporal2;
                         });
@@ -143,7 +154,7 @@ class _IngresoState extends State<Ingreso> {
           Column(children: [
             ElevatedButton(
               onPressed: () {
-                if (titulo.text.length == 0) {
+                if (sector.text.length == 0) {
                   Fluttertoast.showToast(
                       msg: "Ingrese sector",
                       toastLength: Toast.LENGTH_SHORT,
@@ -173,7 +184,7 @@ class _IngresoState extends State<Ingreso> {
                       textColor: Colors.white,
                       fontSize: 16.0);
                 } else {
-                  validarDatos(titulo.text, descrip.text);
+                  validarDatos(sector.text, descrip.text);
                   Navigator.push(
                       context,
                       MaterialPageRoute(

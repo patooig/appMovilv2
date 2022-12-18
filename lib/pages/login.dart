@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cool_alert/cool_alert.dart';
 import 'package:Wakala/global.dart';
 import 'package:Wakala/pages/principal.dart';
@@ -23,12 +25,21 @@ class _loginState extends State<login> {
     final response =
         await LoginService().validar(email.toString(), password.toString());
 
-    print(response.statusCode);
-
     if (response.statusCode == 200) {
       //almacenar de alguna manera el login
+      var data = json.decode(response.body);
+      Fluttertoast.showToast(
+          msg: "Bienvenido " + email,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
       await pref.setString('usuario', email);
+
       Global.login_global = email;
+      Global.id_global = data["id"];
       Navigator.pop(context);
       Navigator.push(
         context,
