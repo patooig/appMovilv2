@@ -185,10 +185,6 @@ class _IngresoState extends State<Ingreso> {
                       fontSize: 16.0);
                 } else {
                   validarDatos(sector.text, descrip.text);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const Principal()));
                 }
               },
               child: const Text('Denunciar wakala !'),

@@ -21,7 +21,7 @@ class _PrincipalState extends State<Principal> {
 
   Future<List<ListadoApi>> obtDatos() async {
     var url = Uri.parse(
-        "https://882aa2605781.sa.ngrok.io/api/wuakalasApi/Getwuakalas");
+        "https://d22292e4f79c.sa.ngrok.io/api/wuakalasApi/Getwuakalas");
     final rep = await http.get(url);
     if (rep.statusCode == 200) {
       return parseMensajes(rep.body);
@@ -32,12 +32,12 @@ class _PrincipalState extends State<Principal> {
 
   Widget cuadro_indicador(int id, String sector, String autor, String fecha) {
     return Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(3),
         child: Container(
-            padding: const EdgeInsets.all(15),
+            padding: const EdgeInsets.all(16),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                color: Colors.amber[100],
+                color: Colors.yellow[100],
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
                   color: Colors.orange[800]!,
@@ -91,17 +91,26 @@ class _PrincipalState extends State<Principal> {
               AsyncSnapshot<List<ListadoApi>> ls = snapshot;
               List<ListadoApi>? lll = ls.data?.cast<ListadoApi>();
 
-              return SingleChildScrollView(
-                controller: null,
-                child: Column(children: [
-                  for (int i = lll!.length - 1; i >= 0; i--)
-                    cuadro_indicador(
-                        lll.elementAt(i).id!,
-                        lll.elementAt(i).sector.toString(),
-                        lll.elementAt(i).autor.toString(),
-                        lll.elementAt(i).fecha.toString())
-                ]),
-              );
+              return RefreshIndicator(
+                  onRefresh: () {
+                    return Future.delayed(const Duration(seconds: 1), () {
+                      setState(() {
+                        obtDatos();
+                      });
+                    });
+                  },
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    controller: null,
+                    child: Column(children: [
+                      for (int i = lll!.length - 1; i >= 0; i--)
+                        cuadro_indicador(
+                            lll.elementAt(i).id!,
+                            lll.elementAt(i).sector.toString(),
+                            lll.elementAt(i).autor.toString(),
+                            lll.elementAt(i).fecha.toString())
+                    ]),
+                  ));
             } else if (snapshot.hasError) {
               return const Text("ERROR");
             }

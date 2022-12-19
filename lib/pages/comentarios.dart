@@ -1,5 +1,6 @@
 import 'package:Wakala/pages/detalleWakala.dart';
 import 'package:Wakala/pages/login.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -47,7 +48,13 @@ class _comentariosState extends State<comentarios> {
           ElevatedButton(
             onPressed: () {
               addComentario(id.toString(), comentario.text, Global.getId());
-
+              CoolAlert.show(
+                context: context,
+                type: CoolAlertType.success,
+                title: 'Comentario ingresado',
+                text: 'Actualice la página para ver el comentario',
+                loopAnimation: false,
+              );
               Navigator.push(
                   context,
                   MaterialPageRoute(

@@ -12,7 +12,7 @@ class ingDatos {
 
     return await http.post(
       Uri.parse(
-          'https://882aa2605781.sa.ngrok.io/api/wuakalasApi/Postwuakalas'),
+          'https://d22292e4f79c.sa.ngrok.io/api/wuakalasApi/Postwuakalas'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

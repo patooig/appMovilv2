@@ -22,7 +22,7 @@ class _detalleFotoState extends State<detalleFoto> {
           padding: const EdgeInsets.all(20),
           child: Center(
             child: Column(children: [
-              Image.network('https://882aa2605781.sa.ngrok.io/images/' + url,
+              Image.network('https://d22292e4f79c.sa.ngrok.io/images/' + url,
                   width: 250, fit: BoxFit.fill),
               SizedBox(
                 height: 20,

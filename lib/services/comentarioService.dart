@@ -8,7 +8,7 @@ Future<http.Response> addComentario(id_wakala, descripcion, id_autor) {
 
   return http.post(
     Uri.parse(
-        'https://882aa2605781.sa.ngrok.io/api/comentariosApi/Postcomentario/'),
+        'https://d22292e4f79c.sa.ngrok.io/api/comentariosApi/Postcomentario/'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

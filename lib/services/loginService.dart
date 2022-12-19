@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 class LoginService {
   Future<http.Response> validar(String login, String pass) async {
     String link =
-        'https://882aa2605781.sa.ngrok.io/api/usuariosApi/GetUsuario?email=' +
+        'https://d22292e4f79c.sa.ngrok.io/api/usuariosApi/GetUsuario?email=' +
             login +
             '&password=' +
             pass;

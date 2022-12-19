@@ -156,7 +156,7 @@ class _loginState extends State<login> {
                   )),
               Padding(padding: EdgeInsets.only(top: 18)),
               Text(
-                "By: Ivonne Flores &  Patricio Inostroza",
+                "By: Patricio Inostroza & Ivonne Flores",
                 style: TextStyle(color: Colors.black45),
               )
             ],
